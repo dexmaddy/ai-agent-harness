@@ -117,7 +117,23 @@ stop:
 
 ### Phase 3: Installation (5 minutes)
 
-**3.1 — Copy hook scripts**
+**Option A — Use the setup wizard (recommended):**
+
+```bash
+python3 path/to/agentic-ai-tiered-startup/setup.py
+```
+
+The wizard handles everything: detects your agent platform, asks your
+preferred data store (YAML, SQLite, or PostgreSQL), copies the right hook
+scripts, generates config, creates sample rules, wires settings, and
+installs dependencies. Choose **Level 4** for the full architecture.
+
+For CI/automation, use non-interactive mode:
+```bash
+python3 setup.py --non-interactive --platform claude --store sqlite --level 4
+```
+
+**Option B — Manual install:**
 
 ```bash
 mkdir -p .agent/hooks
@@ -125,12 +141,8 @@ cp path/to/agentic-ai-tiered-startup/hooks/*.py .agent/hooks/
 pip install pyyaml
 ```
 
-**3.2 — Create settings**
-
-Copy `examples/level-4-full/settings.json` to `.agent/settings.json`.
-Add the PostToolUse entry if not present.
-
-**3.3 — Update your agent instructions**
+Then copy `examples/level-4-full/settings.json` to your agent's settings
+file and update your agent instructions:
 
 ```markdown
 ## Startup

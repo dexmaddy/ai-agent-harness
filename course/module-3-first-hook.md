@@ -74,19 +74,28 @@ The default branch is "main". Never push directly — always use PRs.
 
 ## Step 3: Install the Hook (5 minutes)
 
-```bash
-# Create the hooks directory
-mkdir -p .agent/hooks
+**Option A — Use the setup wizard (recommended):**
 
-# Copy the hook scripts
+```bash
+cd your-project/
+python3 path/to/agentic-ai-tiered-startup/setup.py
+```
+
+The wizard asks your platform (Claude Code, Cursor, Windsurf, Aider, etc.),
+data store (YAML, SQLite, or PostgreSQL), and level — then generates everything.
+For this module, choose **Level 1**.
+
+**Option B — Manual install:**
+
+```bash
+mkdir -p .agent/hooks
 cp path/to/agentic-ai-tiered-startup/hooks/on_session_start.py .agent/hooks/
 cp path/to/agentic-ai-tiered-startup/hooks/validators.py .agent/hooks/
-
-# Install PyYAML
 pip install pyyaml
 ```
 
-Add to `.agent/settings.json` (create if it doesn't exist):
+Then add to your agent's settings file (e.g., `.claude/settings.json`,
+`.cursor/settings.json`, or `.agent/settings.json`):
 
 ```json
 {

@@ -32,6 +32,8 @@ Together, these create a two-layer defense:
 
 ## Step 1: Install the Gate Scripts (3 minutes)
 
+If you used `setup.py` with Level 2+, these are already installed. Otherwise:
+
 ```bash
 cp path/to/agentic-ai-tiered-startup/hooks/gate_check.py .agent/hooks/
 cp path/to/agentic-ai-tiered-startup/hooks/on_prompt_submit.py .agent/hooks/

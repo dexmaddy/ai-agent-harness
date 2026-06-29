@@ -48,10 +48,13 @@ with diagrams for each level.
 
 ## Prerequisites
 
-- An AI coding agent installed (e.g., AI coding agents, Cursor, Windsurf, Aider)
-- A project you actively use AI coding agents with (any language/framework)
+- An AI coding agent installed (Claude Code, Cursor, Windsurf, Aider, or any custom agent)
+- A project you actively use an AI coding agent with (any language/framework)
 - Basic familiarity with JSON and Python (reading, not writing)
-- No database required — everything uses YAML config files
+- No database required — the setup wizard lets you choose YAML files, SQLite, or PostgreSQL
+
+**Quick setup without the course:** If you just want to deploy, run `python3 setup.py`
+in the repo — the interactive wizard handles everything in 2 minutes.
 
 ## How to Use This Course
 
