@@ -431,6 +431,40 @@ claude-tiered-startup/
 └── LICENSE                            # MIT
 ```
 
+## Data Source: Files First, Database When You Graduate
+
+This project uses **YAML config + markdown rule files** by default. No database
+required to get started. This is intentional — for most users, flat files are
+the right choice.
+
+**When files work (under ~50 rules):**
+- Editable with any text editor, no CLI needed
+- Full git history for free
+- Easy to read, review, and onboard new team members
+- Zero dependencies beyond PyYAML
+
+**When to graduate to a database (~50+ rules):**
+
+| Pain Signal | What's Happening | DB Solution |
+|-------------|-----------------|-------------|
+| "Which rules reference fact X?" | Cross-referencing requires scanning every file | One JOIN query |
+| Drift detection is fragile | `find + wc -l` pipelines break on edge cases | `SELECT COUNT(*)` is atomic |
+| Concurrent agent sessions corrupt state | Two agents edit the same YAML simultaneously | SQLite WAL mode handles concurrent writes |
+| Rule search is slow | Grep across 20+ files to find a category | Indexed query by category/trigger |
+| Can't track when rules were added/changed | Git log works but is coarse | `created_at`, `updated_at` columns |
+
+**Recommended graduation path:**
+1. Start with YAML (this project's default)
+2. Watch for the pain signals above
+3. When they appear, migrate to SQLite (single file, no server, Python stdlib)
+4. Build a thin CLI wrapper so you never need raw SQL
+
+SQLite is recommended over Postgres/MySQL because it's embedded (no server),
+the DB is a single portable file (same as YAML), and it ships with Python.
+LangChain and CrewAI both use SQLite for persistent agent state.
+
+---
+
 ## Platform Compatibility
 
 The **concepts** (tiered loading, gating, drift detection, anti-hallucination
