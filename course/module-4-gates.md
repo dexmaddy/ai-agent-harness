@@ -33,8 +33,8 @@ Together, these create a two-layer defense:
 ## Step 1: Install the Gate Scripts (3 minutes)
 
 ```bash
-cp path/to/claude-tiered-startup/hooks/gate_check.py .claude/hooks/
-cp path/to/claude-tiered-startup/hooks/on_prompt_submit.py .claude/hooks/
+cp path/to/agentic-ai-tiered-startup/hooks/gate_check.py .agent/hooks/
+cp path/to/agentic-ai-tiered-startup/hooks/on_prompt_submit.py .agent/hooks/
 ```
 
 ## Step 2: Enable Gates in Config (2 minutes)
@@ -50,7 +50,7 @@ gates:
 
 ## Step 3: Wire the Hooks (3 minutes)
 
-Update `.claude/settings.json`:
+Update `.agent/settings.json`:
 
 ```json
 {
@@ -60,7 +60,7 @@ Update `.claude/settings.json`:
         "matcher": "",
         "hooks": [{
           "type": "command",
-          "command": "python3 .claude/hooks/on_session_start.py",
+          "command": "python3 .agent/hooks/on_session_start.py",
           "timeout": 60000
         }]
       }
@@ -70,7 +70,7 @@ Update `.claude/settings.json`:
         "matcher": "",
         "hooks": [{
           "type": "command",
-          "command": "python3 .claude/hooks/gate_check.py",
+          "command": "python3 .agent/hooks/gate_check.py",
           "timeout": 5000
         }]
       }
@@ -80,7 +80,7 @@ Update `.claude/settings.json`:
         "matcher": "",
         "hooks": [{
           "type": "command",
-          "command": "python3 .claude/hooks/on_prompt_submit.py",
+          "command": "python3 .agent/hooks/on_prompt_submit.py",
           "timeout": 5000
         }]
       }

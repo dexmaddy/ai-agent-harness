@@ -63,9 +63,9 @@ The simplest useful version — manifest + tier1 loading, no gates.
 
 ```bash
 # Copy hooks to your project
-mkdir -p .claude/hooks
-cp hooks/on_session_start.py .claude/hooks/
-cp hooks/validators.py .claude/hooks/
+mkdir -p .agent/hooks
+cp hooks/on_session_start.py .agent/hooks/
+cp hooks/validators.py .agent/hooks/
 
 # Install dependency
 pip install pyyaml
@@ -100,7 +100,7 @@ gates:
 
 ### 3. Add the hook
 
-Add to your `.claude/settings.json` (or copy from `examples/level-1-minimal/`):
+Add to your `.agent/settings.json` (or copy from `examples/level-1-minimal/`):
 
 ```json
 {
@@ -109,7 +109,7 @@ Add to your `.claude/settings.json` (or copy from `examples/level-1-minimal/`):
       "matcher": "",
       "hooks": [{
         "type": "command",
-        "command": "python3 .claude/hooks/on_session_start.py",
+        "command": "python3 .agent/hooks/on_session_start.py",
         "timeout": 60000
       }]
     }]
@@ -155,8 +155,8 @@ the agent cannot use any tool except Read until all tier1 files are loaded.
 ### Install
 
 ```bash
-cp hooks/gate_check.py .claude/hooks/
-cp hooks/on_prompt_submit.py .claude/hooks/
+cp hooks/gate_check.py .agent/hooks/
+cp hooks/on_prompt_submit.py .agent/hooks/
 ```
 
 Update `startup-config.yaml`:
@@ -244,7 +244,7 @@ The cross-check runs once per session (tracked by `cross_check_done` in sentinel
 Block session exit until cleanup is done:
 
 ```bash
-cp hooks/on_stop.py .claude/hooks/
+cp hooks/on_stop.py .agent/hooks/
 ```
 
 ```yaml
@@ -398,7 +398,7 @@ builds a complete working system for your project step by step.
 ## File Structure
 
 ```
-claude-tiered-startup/
+agentic-ai-tiered-startup/
 ├── README.md                          # This guide
 ├── config.example.yaml                # Template config — copy and customize
 ├── settings.example.json              # Full hook configuration

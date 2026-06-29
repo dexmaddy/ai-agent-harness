@@ -76,17 +76,17 @@ The default branch is "main". Never push directly — always use PRs.
 
 ```bash
 # Create the hooks directory
-mkdir -p .claude/hooks
+mkdir -p .agent/hooks
 
 # Copy the hook scripts
-cp path/to/claude-tiered-startup/hooks/on_session_start.py .claude/hooks/
-cp path/to/claude-tiered-startup/hooks/validators.py .claude/hooks/
+cp path/to/agentic-ai-tiered-startup/hooks/on_session_start.py .agent/hooks/
+cp path/to/agentic-ai-tiered-startup/hooks/validators.py .agent/hooks/
 
 # Install PyYAML
 pip install pyyaml
 ```
 
-Add to `.claude/settings.json` (create if it doesn't exist):
+Add to `.agent/settings.json` (create if it doesn't exist):
 
 ```json
 {
@@ -97,7 +97,7 @@ Add to `.claude/settings.json` (create if it doesn't exist):
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/on_session_start.py",
+            "command": "python3 .agent/hooks/on_session_start.py",
             "timeout": 60000
           }
         ]
@@ -152,8 +152,8 @@ The check command failed its validator. Check the detail message.
 For `git-clean` failures, commit your outstanding changes first.
 
 ### Hook doesn't run
-- Verify `.claude/settings.json` is valid JSON (use `python3 -m json.tool`)
-- Check that the command path is correct: `python3 .claude/hooks/on_session_start.py`
+- Verify `.agent/settings.json` is valid JSON (use `python3 -m json.tool`)
+- Check that the command path is correct: `python3 .agent/hooks/on_session_start.py`
 - Restart AI coding agents after changing settings (hooks are loaded at launch)
 
 ---
@@ -162,7 +162,7 @@ For `git-clean` failures, commit your outstanding changes first.
 
 ```
 Your project/
-├── .claude/
+├── .agent/
 │   ├── settings.json              ← Hook configuration
 │   └── hooks/
 │       ├── on_session_start.py    ← SessionStart hook

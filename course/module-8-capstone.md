@@ -120,17 +120,17 @@ stop:
 **3.1 — Copy hook scripts**
 
 ```bash
-mkdir -p .claude/hooks
-cp path/to/claude-tiered-startup/hooks/*.py .claude/hooks/
+mkdir -p .agent/hooks
+cp path/to/agentic-ai-tiered-startup/hooks/*.py .agent/hooks/
 pip install pyyaml
 ```
 
 **3.2 — Create settings**
 
-Copy `examples/level-4-full/settings.json` to `.claude/settings.json`.
+Copy `examples/level-4-full/settings.json` to `.agent/settings.json`.
 Add the PostToolUse entry if not present.
 
-**3.3 — Update CLAUDE.md**
+**3.3 — Update your agent instructions**
 
 ```markdown
 ## Startup
@@ -148,7 +148,7 @@ Do NOT skip startup. Do NOT explain what startup does — just do it.
 **4.1 — Run the smoke test**
 
 ```bash
-python3 path/to/claude-tiered-startup/tests/smoke_test.py --verbose
+python3 path/to/agentic-ai-tiered-startup/tests/smoke_test.py --verbose
 ```
 
 All checks should pass.
@@ -183,7 +183,7 @@ API version, wrong test framework, wrong file path).
 **5.5 — Commit everything**
 
 ```bash
-git add rules/ startup-config.yaml .claude/
+git add rules/ startup-config.yaml .agent/
 git commit -m "Add tiered startup with core rules and infrastructure checks"
 ```
 

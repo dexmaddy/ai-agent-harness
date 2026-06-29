@@ -1,6 +1,6 @@
 title: Tiered Startup Architecture
 description: A hook-based system for reliable AI agent sessions
-baseurl: "/claude-tiered-startup"
+baseurl: "/agentic-ai-tiered-startup"
 url: "https://dexmaddy.github.io"
 
 theme: just-the-docs

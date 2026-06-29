@@ -163,10 +163,10 @@ After every Write or Edit, run automated actions:
 ### Setup
 
 ```bash
-cp path/to/claude-tiered-startup/hooks/on_edit.py .claude/hooks/
+cp path/to/agentic-ai-tiered-startup/hooks/on_edit.py .agent/hooks/
 ```
 
-Add to `.claude/settings.json`:
+Add to `.agent/settings.json`:
 
 ```json
 "PostToolUse": [
@@ -174,7 +174,7 @@ Add to `.claude/settings.json`:
     "matcher": "Write|Edit",
     "hooks": [{
       "type": "command",
-      "command": "python3 .claude/hooks/on_edit.py",
+      "command": "python3 .agent/hooks/on_edit.py",
       "timeout": 5000
     }]
   }
@@ -197,7 +197,7 @@ issue. After max retries, it exits cleanly.
 ### Setup
 
 ```bash
-cp path/to/claude-tiered-startup/hooks/on_stop.py .claude/hooks/
+cp path/to/agentic-ai-tiered-startup/hooks/on_stop.py .agent/hooks/
 ```
 
 Add to config:
@@ -217,7 +217,7 @@ Wire in settings:
     "matcher": "",
     "hooks": [{
       "type": "command",
-      "command": "python3 .claude/hooks/on_stop.py",
+      "command": "python3 .agent/hooks/on_stop.py",
       "timeout": 10000
     }]
   }

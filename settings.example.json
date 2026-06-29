@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/on_session_start.py",
+            "command": "python3 .agent/hooks/on_session_start.py",
             "timeout": 60000
           }
         ]
@@ -18,7 +18,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/gate_check.py",
+            "command": "python3 .agent/hooks/gate_check.py",
             "timeout": 5000
           }
         ]
@@ -30,7 +30,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/on_prompt_submit.py",
+            "command": "python3 .agent/hooks/on_prompt_submit.py",
             "timeout": 5000
           }
         ]
@@ -42,7 +42,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/on_edit.py",
+            "command": "python3 .agent/hooks/on_edit.py",
             "timeout": 5000
           }
         ]
@@ -54,7 +54,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/on_stop.py",
+            "command": "python3 .agent/hooks/on_stop.py",
             "timeout": 10000
           }
         ]
