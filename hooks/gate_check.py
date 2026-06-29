@@ -112,7 +112,13 @@ def main() -> None:
         deny("Startup not initialized. Run SessionStart hook first.")
         return
 
-    # Gate 1: Always allow Read (needed to load tier files)
+    # Gate 1a: Always allow Read (needed to load tier files)
+    # Gate 1b: Always allow git commits (don't block version control)
+    if tool_name == "Bash":
+        cmd = tool_input.get("command", "")
+        if cmd.strip().startswith("git commit") or cmd.strip().startswith("git push"):
+            sys.exit(0)
+
     if tool_name == "Read":
         file_path = tool_input.get("file_path", "")
         if file_path:
@@ -147,7 +153,38 @@ def main() -> None:
         except Exception:
             pass
 
-    # Gate 4: Check for Tier 2 triggers (advisory, not blocking)
+    # Gate 4: DB mode — warn about stale fact references (advisory)
+    db_path = os.environ.get("AGENT_DB_PATH")
+    if db_path and not sentinel.get("fact_check_done") and not db_path.startswith("postgresql"):
+        try:
+            import sqlite3
+            db = sqlite3.connect(db_path, timeout=5)
+            db.row_factory = sqlite3.Row
+            stale = []
+            rows = db.execute(
+                "SELECT fact_key, fact_value, display_forms, file_name "
+                "FROM system_facts sf JOIN fact_references fr ON sf.fact_key = fr.fact_key"
+            ).fetchall()
+            for row in rows:
+                fpath = row["file_name"]
+                if not os.path.exists(fpath):
+                    continue
+                content = Path(fpath).read_text().lower()
+                forms = json.loads(row["display_forms"])
+                if not any(f.lower() in content for f in forms):
+                    stale.append(f"{row['fact_key']}={row['fact_value']} in {os.path.basename(fpath)}")
+            db.close()
+            sentinel["fact_check_done"] = True
+            write_json(SENTINEL, sentinel)
+            if stale:
+                print(json.dumps({"hookSpecificOutput": {
+                    "additionalContext": f"STALE FACTS ({len(stale)}): " + "; ".join(stale[:5])
+                }}))
+        except Exception:
+            sentinel["fact_check_done"] = True
+            write_json(SENTINEL, sentinel)
+
+    # Gate 5: Check for Tier 2 triggers (advisory, not blocking)
     triggered = check_tier2_triggers(tool_input, manifest)
     if triggered:
         names = [t["name"] for t in triggered]

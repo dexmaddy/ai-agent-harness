@@ -141,6 +141,28 @@ def init_db(db_path: str) -> None:
             key TEXT PRIMARY KEY,
             value TEXT NOT NULL
         );
+
+        CREATE TABLE IF NOT EXISTS rule_log (
+            id {serial_type} PRIMARY KEY {auto_increment},
+            event_type TEXT NOT NULL,
+            result TEXT NOT NULL,
+            details TEXT,
+            session_id TEXT,
+            logged_at TIMESTAMP DEFAULT {timestamp_default}
+        );
+
+        CREATE TABLE IF NOT EXISTS system_facts (
+            fact_key TEXT PRIMARY KEY,
+            fact_value TEXT NOT NULL,
+            display_forms TEXT DEFAULT '[]',
+            updated_at TIMESTAMP DEFAULT {timestamp_default}
+        );
+
+        CREATE TABLE IF NOT EXISTS fact_references (
+            id {serial_type} PRIMARY KEY {auto_increment},
+            fact_key TEXT NOT NULL,
+            file_name TEXT NOT NULL
+        );
     """
     _execute_schema(conn, schema)
     # Insert default config if empty
@@ -152,6 +174,7 @@ def init_db(db_path: str) -> None:
         "gates.prompt_health_warnings": "[40, 60, 80]",
         "stop.require_clean_repos": "true",
         "stop.require_transcript": "false",
+        "stop.require_session_summary": "true",
         "stop.max_retries": "8",
     }
     ph = "%s" if _is_postgres(db_path) else "?"
@@ -166,7 +189,7 @@ def init_db(db_path: str) -> None:
     is_pg = _is_postgres(db_path)
     print(f"Database initialized: {db_path}")
     print(f"Backend: {'PostgreSQL' if is_pg else 'SQLite'}")
-    print(f"Tables: rules, checks, backlog, session_summaries, config")
+    print(f"Tables: rules, checks, backlog, session_summaries, config, rule_log, system_facts, fact_references")
     if is_pg:
         print(f"\nNext steps:")
         print(f"  1. Add rules:  psql {db_path} -c \"INSERT INTO rules (name, content, category, tier) VALUES ('my-rule', 'Rule content here', 'general', 1)\"")

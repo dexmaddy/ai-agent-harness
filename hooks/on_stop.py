@@ -106,6 +106,53 @@ def main() -> None:
         if not passed:
             failures.append(f"Transcript missing: {detail}")
 
+    # Configurable shutdown steps from YAML config
+    for step in stop_config.get("shutdown_steps", []):
+        try:
+            result = subprocess.run(
+                step["command"], shell=True, capture_output=True, text=True, timeout=15,
+            )
+            sys.path.insert(0, os.path.dirname(__file__))
+            from validators import get_validator
+            validator = get_validator(step.get("validator", "empty_output"))
+            passed, detail = validator(result.stdout)
+            if not passed:
+                failures.append(f"{step['name']}: {step.get('fail_message', detail)}")
+        except ImportError:
+            pass
+        except subprocess.TimeoutExpired:
+            failures.append(f"{step['name']}: timeout")
+        except Exception as e:
+            failures.append(f"{step.get('name', 'unknown')}: {e}")
+
+    # DB mode: require session summary before exit
+    db_path = os.environ.get("AGENT_DB_PATH")
+    if db_path and stop_config.get("require_session_summary") and not db_path.startswith("postgresql"):
+        try:
+            import sqlite3
+            from datetime import date
+            db = sqlite3.connect(db_path, timeout=5)
+            db.row_factory = sqlite3.Row
+            today = date.today().isoformat()
+            has_summary = db.execute(
+                "SELECT count(*) FROM session_summaries WHERE session_date >= ?", (today,)
+            ).fetchone()[0]
+            if has_summary == 0:
+                edits = db.execute(
+                    "SELECT count(*) FROM rule_log WHERE event_type='edit' AND session_id=?",
+                    (SESSION_ID,),
+                ).fetchone()[0]
+                failures.append(
+                    f"No session summary saved ({edits} edits this session). "
+                    "Save one before stopping:\n"
+                    f"  sqlite3 {db_path} \"INSERT INTO session_summaries "
+                    "(topic, completed_items, next_items) VALUES "
+                    "('<topic>', '[\\\"item1\\\"]', '[\\\"item1\\\"]')\""
+                )
+            db.close()
+        except Exception:
+            pass
+
     # Audit checks: run full audit if configured
     if stop_config.get("require_audit_pass"):
         try:

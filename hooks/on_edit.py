@@ -143,6 +143,22 @@ def main() -> None:
     #     if failures:
     #         messages.append(f"SYNC FAILED: {'; '.join(failures)}")
 
+    # DB mode: log edit to rule_log table
+    db_path = os.environ.get("AGENT_DB_PATH")
+    if db_path and not db_path.startswith("postgresql"):
+        try:
+            import sqlite3
+            db = sqlite3.connect(db_path, timeout=5)
+            db.execute(
+                "INSERT INTO rule_log (event_type, result, details, session_id) "
+                "VALUES ('edit', 'logged', ?, ?)",
+                (f"Edited: {os.path.basename(file_path)}", SESSION_ID),
+            )
+            db.commit()
+            db.close()
+        except Exception:
+            pass
+
     # Periodic save reminder
     if count > 0 and count % SAVE_REMINDER_INTERVAL == 0:
         messages.append(f"SAVE REMINDER: {count} edits this session. Consider committing and pushing.")
