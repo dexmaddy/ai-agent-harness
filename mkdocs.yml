@@ -69,7 +69,12 @@ extra_css:
   - stylesheets/extra.css
 
 nav:
-  - What You'll Achieve: index.md
+  - What You'll Achieve:
+    - index.md
+    - Overview: overview/index.md
+    - Getting Started: reference/setup-wizard.md
+    - Mini Course: course/index.md
+    - Reference: reference/index.md
   - Overview:
     - overview/index.md
     - The Problem: overview/the-problem.md
